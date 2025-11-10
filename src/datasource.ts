@@ -7,13 +7,9 @@ import { WaapQuery, JsonWaapData, SeriesResponse } from './types';
 import { normalizeBytes, SizeUnitEnum } from './utils/normalize';
 
 export class DataSource extends DataSourceApi<WaapQuery, JsonWaapData> {
-  private apiBase: string;
-  private authHeader?: string;
 
   constructor(private instanceSettings: DataSourceInstanceSettings<JsonWaapData>) {
     super(instanceSettings);
-    this.apiBase = (instanceSettings.jsonData?.apiUrl || '').replace(/\/+$/, '');
-    this.authHeader = (instanceSettings as any)?.decryptedSecureJsonData?.apiKey;
   }
 
   async query(req: DataQueryRequest<WaapQuery>): Promise<DataQueryResponse> {
@@ -40,10 +36,10 @@ export class DataSource extends DataSourceApi<WaapQuery, JsonWaapData> {
 
     try {
       const r1 = await auth('iam/users/me');
-      return { status: 'success', message: `Auth OK (IAM): ${r1.data?.name ?? 'OK'}` };
+      return { status: 'success', message: `Auth OK (IAM): ${(r1.data as { name?: string })?.name ?? 'OK'}` };
     } catch {
       const r2 = await auth('users/me');
-      return { status: 'success', message: `Auth OK: ${r2.data?.name ?? 'OK'}` };
+      return { status: 'success', message: `Auth OK: ${(r2.data as { name?: string })?.name ?? 'OK'}` };
     }
   }
 
