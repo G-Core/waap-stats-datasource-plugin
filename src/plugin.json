@@ -1,0 +1,50 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "datasource",
+  "name": "Waap",
+  "id": "gcore-waap-datasource",
+  "metrics": true,
+  "info": {
+    "description": "",
+    "author": {
+      "name": "gcore"
+    },
+    "keywords": ["datasource"],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaDependency": ">=10.4.0",
+    "plugins": []
+  },
+  "routes": [
+     {
+    "path": "users/me",
+    "url": "https://{{if .JsonData.apiUrl }}{{ .JsonData.apiUrl }}{{else}}api.gcore.com{{end}}/users/me",
+    "headers": [{ "name": "Authorization", "content": "{{ .SecureJsonData.apiKey }}" }]
+  },
+  {
+    "path": "iam/users/me",
+    "url": "https://{{if .JsonData.apiUrl }}{{ .JsonData.apiUrl }}{{else}}api.gcore.com{{end}}/iam/users/me",
+    "headers": [{ "name": "Authorization", "content": "{{ .SecureJsonData.apiKey }}" }]
+  },
+{
+  "path": "waap/v1/analytics/requests",
+  "url": "https://{{if .JsonData.apiUrl }}{{ .JsonData.apiUrl }}{{else}}api.gcore.com{{end}}/waap/v1/analytics/requests",
+  "headers": [
+    { "name": "Authorization", "content": "{{ .SecureJsonData.apiKey }}" }
+  ]
+},
+  {
+    "path": "waap/v1/statistics/series",
+    "url": "https://{{if .JsonData.apiUrl }}{{ .JsonData.apiUrl }}{{else}}api.gcore.com{{end}}/waap/v1/statistics/series",
+    "headers": [{ "name": "Authorization", "content": "{{ .SecureJsonData.apiKey }}" }]
+  }
+  ]
+}
